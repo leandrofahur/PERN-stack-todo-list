@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const db = require("./config/db");
+const todoController = require("./controllers/todoController");
 const Todo = require("./models/Todo");
 const cors = require("cors");
 
@@ -15,58 +16,16 @@ db.authenticate()
 app.use(cors());
 app.use(express.json({ extended: false }));
 
-// ROUTES
-
-// create a todo
-app.post("/todos", async (req, res) => {
-  try {
-    const { description } = req.body;
-
-    const newTodo = await Todo.create({
-      description,
-    });
-
-    res.json({
-      status: 200,
-      message: newTodo,
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({
-      status: 500,
-      error: "Server error!",
-    });
-  }
-});
-
-// get all todos
-app.get("/todos", async (req, res) => {
-  try {
-    const todos = await Todo.findAll();
-
-    res.json({
-      status: 200,
-      message: todos,
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({
-      status: 500,
-      error: "Server error!",
-    });
-  }
-});
-
-// get a todo by id
-
-// update a todo
-
-// delete a todo
+app.post("/todos", todoController.addTodo);
+app.get("/todos", todoController.findAll);
+app.get("/todos/:id", todoController.findById);
+app.put("/todos/:id", todoController.update);
+app.delete("/todos/:id", todoController.delete);
 
 db.sync()
   .then((result) => {
     // console.log(result);
-    console.log("Database synced");
+    console.log("Database synced...");
   })
   .catch((error) => console.error(error.message));
 
