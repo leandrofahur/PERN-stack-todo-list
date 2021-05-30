@@ -66,10 +66,7 @@ exports.findById = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { description } = req.body;
-    const todo = await Todo.findByPk(id);
-
+    const todo = await Todo.findByPk(req.params.id);
     if (!todo) {
       return res.status(500).json({
         status: 500,
@@ -77,6 +74,8 @@ exports.update = async (req, res) => {
       });
     }
 
+    const { description } = req.body;
+    console.log(req.body);
     await todo.update({ description });
     res.status(200).json({
       status: 200,

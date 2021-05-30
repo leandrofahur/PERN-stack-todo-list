@@ -14,7 +14,7 @@ function InputTodo() {
         body: JSON.stringify(body),
       });
 
-      window.location("/");
+      // window.location("/");
     } catch (error) {
       console.error(error.message);
     }
